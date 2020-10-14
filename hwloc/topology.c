@@ -1099,24 +1099,25 @@ hwloc_topology_dup(hwloc_topology_t *newp,
 static const unsigned obj_type_order[] = {
     /* first entry is HWLOC_OBJ_MACHINE */  0,
     /* next entry is HWLOC_OBJ_PACKAGE */  4,
-    /* next entry is HWLOC_OBJ_CORE */     14,
-    /* next entry is HWLOC_OBJ_PU */       18,
-    /* next entry is HWLOC_OBJ_L1CACHE */  12,
-    /* next entry is HWLOC_OBJ_L2CACHE */  10,
-    /* next entry is HWLOC_OBJ_L3CACHE */  8,
-    /* next entry is HWLOC_OBJ_L4CACHE */  7,
-    /* next entry is HWLOC_OBJ_L5CACHE */  6,
-    /* next entry is HWLOC_OBJ_L1ICACHE */ 13,
-    /* next entry is HWLOC_OBJ_L2ICACHE */ 11,
-    /* next entry is HWLOC_OBJ_L3ICACHE */ 9,
+    /* next entry is HWLOC_OBJ_CORE */     15,
+    /* next entry is HWLOC_OBJ_PU */       19,
+    /* next entry is HWLOC_OBJ_L1CACHE */  13,
+    /* next entry is HWLOC_OBJ_L2CACHE */  11,
+    /* next entry is HWLOC_OBJ_L3CACHE */  9,
+    /* next entry is HWLOC_OBJ_L4CACHE */  8,
+    /* next entry is HWLOC_OBJ_L5CACHE */  7,
+    /* next entry is HWLOC_OBJ_L1ICACHE */ 14,
+    /* next entry is HWLOC_OBJ_L2ICACHE */ 12,
+    /* next entry is HWLOC_OBJ_L3ICACHE */ 10,
     /* next entry is HWLOC_OBJ_GROUP */    1,
     /* next entry is HWLOC_OBJ_NUMANODE */ 3,
-    /* next entry is HWLOC_OBJ_BRIDGE */   15,
-    /* next entry is HWLOC_OBJ_PCI_DEVICE */  16,
-    /* next entry is HWLOC_OBJ_OS_DEVICE */   17,
-    /* next entry is HWLOC_OBJ_MISC */     19,
+    /* next entry is HWLOC_OBJ_BRIDGE */   16,
+    /* next entry is HWLOC_OBJ_PCI_DEVICE */  17,
+    /* next entry is HWLOC_OBJ_OS_DEVICE */   18,
+    /* next entry is HWLOC_OBJ_MISC */     20,
     /* next entry is HWLOC_OBJ_MEMCACHE */ 2,
-    /* next entry is HWLOC_OBJ_DIE */      5
+    /* next entry is HWLOC_OBJ_DIE */      6,
+    /* next entry is HWLOC_OBJ_CLUSTER */  5
 };
 
 #ifndef NDEBUG /* only used in debug check assert if !NDEBUG */
@@ -1126,6 +1127,7 @@ static const hwloc_obj_type_t obj_order_type[] = {
   HWLOC_OBJ_MEMCACHE,
   HWLOC_OBJ_NUMANODE,
   HWLOC_OBJ_PACKAGE,
+  HWLOC_OBJ_CLUSTER,
   HWLOC_OBJ_DIE,
   HWLOC_OBJ_L5CACHE,
   HWLOC_OBJ_L4CACHE,
@@ -1152,6 +1154,7 @@ static const hwloc_obj_type_t obj_order_type[] = {
  * then Core
  * then Package
  * then Die
+ * then Cluster
  * then Cache,
  * then Instruction Caches
  * then always drop Group/Misc/Bridge.
@@ -1179,7 +1182,8 @@ static const int obj_type_priority[] = {
   /* next entry is HWLOC_OBJ_OS_DEVICE */   100,
   /* next entry is HWLOC_OBJ_MISC */        0,
   /* next entry is HWLOC_OBJ_MEMCACHE */    19,
-  /* next entry is HWLOC_OBJ_DIE */         30
+  /* next entry is HWLOC_OBJ_DIE */         30,
+  /* next entry is HWLOCL_OBJ_CLUSTER */    29
 };
 
 int hwloc_compare_types (hwloc_obj_type_t type1, hwloc_obj_type_t type2)
@@ -2368,6 +2372,7 @@ hwloc_reset_normal_type_depths(hwloc_topology_t topology)
     topology->type_depth[i] = HWLOC_TYPE_DEPTH_UNKNOWN;
   /* type contiguity is asserted in topology_check() */
   topology->type_depth[HWLOC_OBJ_DIE] = HWLOC_TYPE_DEPTH_UNKNOWN;
+  topology->type_depth[HWLOC_OBJ_CLUSTER] = HWLOC_TYPE_DEPTH_UNKNOWN;
 }
 
 static int
@@ -4866,7 +4871,8 @@ hwloc_topology_check(struct hwloc_topology *topology)
   HWLOC_BUILD_ASSERT(HWLOC_OBJ_OS_DEVICE  + 1 == HWLOC_OBJ_MISC);
   HWLOC_BUILD_ASSERT(HWLOC_OBJ_MISC       + 1 == HWLOC_OBJ_MEMCACHE);
   HWLOC_BUILD_ASSERT(HWLOC_OBJ_MEMCACHE   + 1 == HWLOC_OBJ_DIE);
-  HWLOC_BUILD_ASSERT(HWLOC_OBJ_DIE        + 1 == HWLOC_OBJ_TYPE_MAX);
+  HWLOC_BUILD_ASSERT(HWLOC_OBJ_DIE        + 1 == HWLOC_OBJ_CLUSTER);
+  HWLOC_BUILD_ASSERT(HWLOC_OBJ_CLUSTER    + 1 == HWLOC_OBJ_TYPE_MAX);
 
   /* make sure order and priority arrays have the right size */
   HWLOC_BUILD_ASSERT(sizeof(obj_type_order)/sizeof(*obj_type_order) == HWLOC_OBJ_TYPE_MAX);

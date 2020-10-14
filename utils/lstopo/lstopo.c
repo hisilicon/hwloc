@@ -587,7 +587,7 @@ struct lstopo_type_filter { enum hwloc_type_filter_e filter; int changed; };
 #define init_type_filters() do { \
   unsigned _i; \
   HWLOC_BUILD_ASSERT(HWLOC_OBJ_TYPE_MIN == 0); \
-  HWLOC_BUILD_ASSERT(HWLOC_OBJ_TYPE_MAX == 20); \
+  HWLOC_BUILD_ASSERT(HWLOC_OBJ_TYPE_MAX == 21); \
   for(_i=HWLOC_OBJ_TYPE_MIN; _i<HWLOC_OBJ_TYPE_MAX; _i++) \
     type_filter[_i].changed = 0; \
 } while (0)

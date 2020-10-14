@@ -319,6 +319,10 @@ typedef enum {
 			 * A subpart of the physical package, that contains multiple cores.
 			 */
 
+  HWLOC_OBJ_CLUSTER,	/**< \brief Grouping of CPUs
+			 * A subpart of a numa node.
+			 */
+
   HWLOC_OBJ_TYPE_MAX    /**< \private Sentinel value */
 } hwloc_obj_type_t;
 
